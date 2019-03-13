@@ -1,0 +1,144 @@
+diff --git a/lib/Mollie/GuzzleHttp/Guzzle/src/Cookie/SessionCookieJar.php b/lib/Mollie/GuzzleHttp/Guzzle/src/Cookie/SessionCookieJar.php
+index 4497bcf..170dbc3 100644
+--- a/lib/Mollie/GuzzleHttp/Guzzle/src/Cookie/SessionCookieJar.php
++++ b/lib/Mollie/GuzzleHttp/Guzzle/src/Cookie/SessionCookieJar.php
+@@ -48,6 +48,7 @@ class SessionCookieJar extends CookieJar
+             }
+         }
+ 
++        // @codingStandardsIgnoreLine
+         $_SESSION[$this->sessionKey] = json_encode($json);
+     }
+ 
+@@ -56,9 +57,11 @@ class SessionCookieJar extends CookieJar
+      */
+     protected function load()
+     {
++        // @codingStandardsIgnoreLine
+         if (!isset($_SESSION[$this->sessionKey])) {
+             return;
+         }
++        // @codingStandardsIgnoreLine
+         $data = json_decode($_SESSION[$this->sessionKey], true);
+         if (is_array($data)) {
+             foreach ($data as $cookie) {
+diff --git a/lib/Mollie/GuzzleHttp/Guzzle/src/Cookie/SetCookie.php b/lib/Mollie/GuzzleHttp/Guzzle/src/Cookie/SetCookie.php
+index f699394..47c12b8 100644
+--- a/lib/Mollie/GuzzleHttp/Guzzle/src/Cookie/SetCookie.php
++++ b/lib/Mollie/GuzzleHttp/Guzzle/src/Cookie/SetCookie.php
+@@ -36,6 +36,7 @@ class SetCookie
+         // Explode the cookie string using a series of semicolons
+         $pieces = array_filter(array_map('trim', explode(';', $cookie)));
+         // The name of the cookie (first kvp) must exist and include an equal sign.
++        // @codingStandardsIgnoreLine
+         if (empty($pieces[0]) || !strpos($pieces[0], '=')) {
+             return new self($data);
+         }
+diff --git a/lib/Mollie/GuzzleHttp/Guzzle/src/Handler/StreamHandler.php b/lib/Mollie/GuzzleHttp/Guzzle/src/Handler/StreamHandler.php
+index b686545..e335aea 100644
+--- a/lib/Mollie/GuzzleHttp/Guzzle/src/Handler/StreamHandler.php
++++ b/lib/Mollie/GuzzleHttp/Guzzle/src/Handler/StreamHandler.php
+@@ -57,9 +57,13 @@ class StreamHandler
+             // Determine if the error was a networking error.
+             $message = $e->getMessage();
+             // This list can probably get more comprehensive.
++            // @codingStandardsIgnoreLine
+             if (strpos($message, 'getaddrinfo') // DNS lookup failed
++                // @codingStandardsIgnoreLine
+                 || strpos($message, 'Connection refused')
++                // @codingStandardsIgnoreLine
+                 || strpos($message, "couldn't connect to host") // error on HHVM
++                // @codingStandardsIgnoreLine
+                 || strpos($message, "connection attempt failed")
+             ) {
+                 $e = new ConnectException($e->getMessage(), $request, $e);
+diff --git a/lib/Mollie/GuzzleHttp/Guzzle/src/UriTemplate.php b/lib/Mollie/GuzzleHttp/Guzzle/src/UriTemplate.php
+index 96dcfd0..f3cceb6 100644
+--- a/lib/Mollie/GuzzleHttp/Guzzle/src/UriTemplate.php
++++ b/lib/Mollie/GuzzleHttp/Guzzle/src/UriTemplate.php
+@@ -72,6 +72,7 @@ class UriTemplate
+         foreach (explode(',', $expression) as $value) {
+             $value = trim($value);
+             $varspec = [];
++            // @codingStandardsIgnoreLine
+             if ($colonPos = strpos($value, ':')) {
+                 $varspec['value'] = substr($value, 0, $colonPos);
+                 $varspec['modifier'] = ':';
+diff --git a/lib/Mollie/GuzzleHttp/Guzzle/src/functions.php b/lib/Mollie/GuzzleHttp/Guzzle/src/functions.php
+index a3ac450..8476baa 100644
+--- a/lib/Mollie/GuzzleHttp/Guzzle/src/functions.php
++++ b/lib/Mollie/GuzzleHttp/Guzzle/src/functions.php
+@@ -257,6 +257,7 @@ function is_host_in_noproxy($host, array $noProxyArray)
+     }
+ 
+     // Strip port if present.
++    // @codingStandardsIgnoreLine
+     if (strpos($host, ':')) {
+         $host = explode($host, ':', 2)[0];
+     }
+diff --git a/lib/Mollie/GuzzleHttp/Promises/src/Promise.php b/lib/Mollie/GuzzleHttp/Promises/src/Promise.php
+index 844ada0..db31122 100644
+--- a/lib/Mollie/GuzzleHttp/Promises/src/Promise.php
++++ b/lib/Mollie/GuzzleHttp/Promises/src/Promise.php
+@@ -72,6 +72,7 @@ class Promise implements PromiseInterface
+                 return $inner;
+             } else {
+                 // It's rejected so "unwrap" and throw an exception.
++                // @codingStandardsIgnoreLine
+                 throw exception_for($inner);
+             }
+         }
+@@ -125,6 +126,7 @@ class Promise implements PromiseInterface
+             if ($state === $this->state && $value === $this->result) {
+                 return;
+             }
++            // @codingStandardsIgnoreLine
+             throw $this->state === $state
+                 ? new \LogicException("The promise is already {$state}.")
+                 : new \LogicException("Cannot change a {$this->state} promise to {$state}");
+diff --git a/lib/Mollie/GuzzleHttp/Promises/src/RejectedPromise.php b/lib/Mollie/GuzzleHttp/Promises/src/RejectedPromise.php
+index 2bc6508..fad4581 100644
+--- a/lib/Mollie/GuzzleHttp/Promises/src/RejectedPromise.php
++++ b/lib/Mollie/GuzzleHttp/Promises/src/RejectedPromise.php
+@@ -59,6 +59,7 @@ class RejectedPromise implements PromiseInterface
+     public function wait($unwrap = true, $defaultDelivery = null)
+     {
+         if ($unwrap) {
++            // @codingStandardsIgnoreLine
+             throw exception_for($this->reason);
+         }
+     }
+diff --git a/lib/Mollie/GuzzleHttp/Promises/src/functions.php b/lib/Mollie/GuzzleHttp/Promises/src/functions.php
+index 4e27709..00d97c3 100644
+--- a/lib/Mollie/GuzzleHttp/Promises/src/functions.php
++++ b/lib/Mollie/GuzzleHttp/Promises/src/functions.php
+@@ -151,6 +151,7 @@ function inspect(PromiseInterface $promise)
+             'state' => PromiseInterface::FULFILLED,
+             'value' => $promise->wait()
+         ];
++        // @codingStandardsIgnoreLine
+     } catch (RejectionException $e) {
+         return ['state' => PromiseInterface::REJECTED, 'reason' => $e->getReason()];
+     } catch (\Throwable $e) {
+@@ -271,6 +272,7 @@ function some($count, $promises)
+     )->then(
+         function () use (&$results, &$rejections, $count) {
+             if (count($results) !== $count) {
++                // @codingStandardsIgnoreLine
+                 throw new AggregateException(
+                     'Not enough promises to fulfill count',
+                     $rejections
+diff --git a/lib/Mollie/GuzzleHttp/Psr7/src/ServerRequest.php b/lib/Mollie/GuzzleHttp/Psr7/src/ServerRequest.php
+index 99f453a..c8f4cfd 100644
+--- a/lib/Mollie/GuzzleHttp/Psr7/src/ServerRequest.php
++++ b/lib/Mollie/GuzzleHttp/Psr7/src/ServerRequest.php
+@@ -175,7 +175,9 @@ class ServerRequest extends Request implements ServerRequestInterface
+ 
+         return $serverRequest
+             ->withCookieParams($_COOKIE)
++            // @codingStandardsIgnoreLine
+             ->withQueryParams($_GET)
++            // @codingStandardsIgnoreLine
+             ->withParsedBody($_POST)
+             ->withUploadedFiles(self::normalizeFiles($_FILES));
+     }
