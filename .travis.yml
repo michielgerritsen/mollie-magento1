@@ -24,10 +24,8 @@ script:
 
 deploy:
   provider: releases
-  api_key:
-    secure: YtnlWIwVaqJONEWYLnECasyaDDV3f9+UsugcXIN2leem2WX7ziNyo1WdOZ43ezObZiK80OJ6yoPh+x09utCIYOvKgjMpFi4GmwtX+sldcJL2QZvmcC/wYD5XpbNRV/EEm0y3Gb93STz2TziWoBCSGszN3/kLV7/p44fFvYXSZ3ph1kfU5Y80i2ebxuI74XXKhzfgkX025W+Mp4J1JAVshjYg2lQZDwuD3NDLH8cdIR0a1VqYI/2xly1nvetxfx92T0VL6qtfKz/3Gi4zIOf00H4xNA970glqnu88UxymRjcr5a+JiyB99UUcpCymLSFp/MjrvhRNfIKc4xlGNA5oCR3G5Ipn2eRd+cwUZctgSTUPQqrnch/eyrdwlL2uQy5SeFgRrgSN5otgWBqgnuhtC3suia/+HXbY0lU7qGD+AWnJ4ZVCvHAu4PvSuL7jYbl9Vr1EXjMUe2tggCmxgYkB4IRJYMpreD11j/XKCNiiCjmlQ0x4Co/NX59UPfpDFVD3Kwj1Dqoxuw7+rVTQgRMI9LIUjTifauZ7G9eqXrPiXyfRG6PLlnLs0IgbBr4s04KjeVqijKNt7cxoD3HI0su+EPoOR0OEi5SaacB2VTpd4CzSuXKtEXAdEQF/3tdvwelGXrn+1g2Kk4gUWJP4LAiLWOwTUqcYovx2z6O9wBJTgfs=
+  api_key: $GITHUB_API_KEY
   file: Mollie_Payment.zip
   skip_cleanup: true
   on:
-    condition: CREATE_RELEASE=true
-    branch: feature/meqp-codesniffer
+    tags: true
